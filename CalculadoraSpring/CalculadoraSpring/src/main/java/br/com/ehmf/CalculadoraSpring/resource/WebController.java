@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -19,15 +21,24 @@ public class WebController {
 		return "index";
 	}
 	
+	@PostMapping("/")
 	public String handleFormSubmission(@RequestParam String modelOperacoes,
 										@RequestParam String valor1,
 										@RequestParam String valor2,
 										Model model)
 	{
+		model.addAttribute("modelOperacoes", List.of("Soma", "Subtração", "Multiplicação","Divisão"));
+		
 		if (modelOperacoes.isEmpty() || valor1.isEmpty() || valor2.isEmpty())
 		{
 			model.addAttribute("response", "Informe os valores.");
 			return null;
+		}
+		
+		if (modelOperacoes.equals("Divisão") && Integer.parseInt(valor2) == 0)
+		{
+			model.addAttribute("response","Divisor não pode ser zero.");
+			return("index");
 		}
 
 		
@@ -50,11 +61,15 @@ public class WebController {
 		}
 		
 		resposta = String.valueOf(res);
-		model.addAttribute("modelOperacoes", List.of("Soma", "Subtração", "Multiplicação","Divisão"));
 		model.addAttribute("response", resposta);
 		
 		return "index";
 		
 	}
 
+	@RequestMapping("/limparResposta")
+	public String limparResposta(Model model)
+	{
+		return "redirect:/";
+	}
 }
