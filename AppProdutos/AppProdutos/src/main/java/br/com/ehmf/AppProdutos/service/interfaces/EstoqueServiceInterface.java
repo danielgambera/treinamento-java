@@ -8,7 +8,6 @@ import br.com.ehmf.AppProdutos.model.Produto;
 
 public interface EstoqueServiceInterface {
 
-	
 	Estoque save(Estoque estoque);
 
 	Optional<Estoque> getById(Long id);
