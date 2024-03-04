@@ -48,6 +48,7 @@ public class EstoqueService implements EstoqueServiceInterface {
 		}
 		return estoque;
 	}
+	
 
 	@Override
 	public void delete(Long id) {
