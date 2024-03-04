@@ -3,6 +3,7 @@ package br.com.ehmf.AppProdutos.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ehmf.AppProdutos.model.Estoque;
@@ -14,6 +15,7 @@ public class EstoqueService implements EstoqueServiceInterface {
 
 	private EstoqueRepository estoqueRepository;
 	
+	@Autowired
 	public EstoqueService(EstoqueRepository estoqueRepository)
 	{
 		this.estoqueRepository = estoqueRepository;
@@ -40,7 +42,7 @@ public class EstoqueService implements EstoqueServiceInterface {
 		if (findEstoque.isPresent())
 		{
 			Estoque updateEstoque = findEstoque.get();
-			updateEstoque.setProduto(estoque.getProduto());
+			updateEstoque.setProduto(findEstoque.get().getProduto());
 			updateEstoque.setQuantidade(estoque.getQuantidade());
 			return estoqueRepository.save(updateEstoque);
 		}
