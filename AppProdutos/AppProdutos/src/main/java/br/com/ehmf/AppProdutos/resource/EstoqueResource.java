@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import br.com.ehmf.AppProdutos.model.Estoque;
 import br.com.ehmf.AppProdutos.service.EstoqueService;
 
+
 @RestController
 @RequestMapping("/api/estoque")
+
 public class EstoqueResource {
 
 	private EstoqueService estoqueService;
@@ -32,6 +35,7 @@ public class EstoqueResource {
 	}
 	
 	@PostMapping
+
 	public ResponseEntity<Estoque> save(@RequestBody Estoque estoque)
 	{
 		Estoque newEstoque = estoqueService.save(estoque);

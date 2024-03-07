@@ -3,6 +3,7 @@ package br.com.ehmf.AppProdutos.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ehmf.AppProdutos.model.Estoque;
@@ -20,6 +21,7 @@ public class EstoqueService implements EstoqueServiceInterface {
 	
 	
 	public EstoqueService(EstoqueRepository estoqueRepository, ProdutoRepository produtoRepository)
+
 	{
 		this.estoqueRepository = estoqueRepository;
 		this.produtoRepository = produtoRepository;
@@ -69,6 +71,7 @@ public class EstoqueService implements EstoqueServiceInterface {
 		}
 		return estoque;
 	}
+	
 
 	@Override
 	public void delete(Long id) {
