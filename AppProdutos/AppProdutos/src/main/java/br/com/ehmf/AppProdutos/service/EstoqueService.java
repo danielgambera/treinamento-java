@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ehmf.AppProdutos.model.Estoque;
+import br.com.ehmf.AppProdutos.model.Produto;
 import br.com.ehmf.AppProdutos.repository.EstoqueRepository;
+import br.com.ehmf.AppProdutos.repository.ProdutoRepository;
 import br.com.ehmf.AppProdutos.service.interfaces.EstoqueServiceInterface;
 
 @Service
@@ -15,15 +17,36 @@ public class EstoqueService implements EstoqueServiceInterface {
 
 	private EstoqueRepository estoqueRepository;
 	
-	@Autowired
-	public EstoqueService(EstoqueRepository estoqueRepository)
+	private ProdutoRepository produtoRepository;
+	
+	
+	public EstoqueService(EstoqueRepository estoqueRepository, ProdutoRepository produtoRepository)
+
 	{
 		this.estoqueRepository = estoqueRepository;
+		this.produtoRepository = produtoRepository;
 	}
 	
 	@Override
 	public Estoque save(Estoque estoque) {
-		return estoqueRepository.save(estoque);
+		
+		if (estoque.getId() == null)
+		{
+			System.out.println("Produto não encontrado");
+			return null;			
+		}
+		
+		Optional<Produto> findProduto = produtoRepository.findById(estoque.getProduto().getId());
+		if (findProduto == null || findProduto.isEmpty())
+		{
+			System.out.println("Produto não encontrado");
+			return null;
+		}
+		else
+		{
+			estoque.setProduto(findProduto.get());
+			return estoqueRepository.save(estoque);
+		}
 	}
 
 	@Override
