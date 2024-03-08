@@ -72,11 +72,69 @@ public class EstoqueService implements EstoqueServiceInterface {
 		return estoque;
 	}
 	
-
 	@Override
 	public void delete(Long id) {
 		estoqueRepository.deleteById(id);
 		
+	}
+
+		
+	@Override
+	public Estoque addQuantidade(Produto produto, int quantidade) {
+		Optional<Produto> findProduto = produtoRepository.findById(produto.getId());
+		if (!findProduto.isPresent())
+		{
+			return null;
+		}
+		
+		Optional<Estoque> findEstoque = estoqueRepository.findByProduto(findProduto);
+		if (!findEstoque.isPresent())
+		{
+			return null;
+		}
+		
+		Estoque updateEstoque = findEstoque.get();
+		updateEstoque.setProduto(findEstoque.get().getProduto());
+		updateEstoque.setQuantidade(findEstoque.get().getQuantidade() + quantidade);	
+		
+		return estoqueRepository.save(updateEstoque);		
+	}
+	
+
+	@Override
+	public Estoque delQuantidade(Produto produto, int quantidade) {
+		
+		Optional<Produto> findProduto = produtoRepository.findById(produto.getId());
+		if (!findProduto.isPresent())
+		{
+			return null;
+		}
+		
+		Optional<Estoque> findEstoque = estoqueRepository.findByProduto(findProduto);
+		if (!findEstoque.isPresent())
+		{
+			return null;
+		}
+		
+		Estoque updateEstoque = findEstoque.get();
+		updateEstoque.setProduto(findEstoque.get().getProduto());
+		updateEstoque.setQuantidade(findEstoque.get().getQuantidade() - quantidade);
+		
+		if (updateEstoque.getQuantidade() < 0)
+		{
+			System.out.println("Não há itens suficientes no estoque para essa operação.");
+			return null;
+		}
+		
+		return estoqueRepository.save(updateEstoque);		
+	}
+
+	@Override
+	public List<Estoque> findEstoqueQuantidade(Integer quantidade) {
+		List<Estoque> listEstoque = estoqueRepository.findEstoqueQuantidadeLessThan(quantidade);
+		if (listEstoque.size() < 1)
+			return null;
+		return listEstoque;
 	}
 
 }
