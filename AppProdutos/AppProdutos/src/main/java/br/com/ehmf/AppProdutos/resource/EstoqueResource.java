@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import br.com.ehmf.AppProdutos.model.Estoque;
+import br.com.ehmf.AppProdutos.model.Produto;
 import br.com.ehmf.AppProdutos.service.EstoqueService;
 
 
@@ -61,8 +62,7 @@ public class EstoqueResource {
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(estoques);
 	}
-	
-	
+		
 	@PutMapping
 	public ResponseEntity<Estoque> update(@RequestBody Estoque estoque)
 	{
@@ -79,5 +79,33 @@ public class EstoqueResource {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
+	@PostMapping("/addQuantidade/{qtde}")
+	public ResponseEntity<Estoque> addQuantidade(@RequestBody Produto produto, @PathVariable int qtde)
+	{
+		Estoque findEstoque = estoqueService.addQuantidade(produto, qtde);
+		if (findEstoque == null)
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(findEstoque);
+	}
 	
+	@PostMapping("/delQuantidade/{qtde}")
+	public ResponseEntity<Estoque> delQuantidade(@RequestBody Produto produto, @PathVariable int qtde)
+	{
+		Estoque findEstoque = estoqueService.delQuantidade(produto, qtde);
+		if (findEstoque == null)
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(findEstoque);
+	}
+	
+	@GetMapping("/findEstoqueQuantidade/{qtde}")
+	public ResponseEntity<List<Estoque>> findEstoqueQuantidade(@PathVariable Integer qtde)
+	{
+		List<Estoque> listEstoque = estoqueService.findEstoqueQuantidade(qtde);
+		if (listEstoque == null)
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(listEstoque);
+	
+	}
 }
