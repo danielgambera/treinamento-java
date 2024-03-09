@@ -137,4 +137,12 @@ public class EstoqueService implements EstoqueServiceInterface {
 		return listEstoque;
 	}
 
+	@Override
+	public List<Estoque> findEstoqueQuantidadeGreaterThan(Integer quantidade) {
+		List<Estoque> listEstoque = estoqueRepository.findEstoqueQuantidadeGreaterThan(quantidade);
+		if (listEstoque.size() < 1)
+			return null;
+		return listEstoque;
+	}
+
 }
