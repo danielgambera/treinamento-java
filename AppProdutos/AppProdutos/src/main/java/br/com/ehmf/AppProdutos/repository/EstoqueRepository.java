@@ -18,5 +18,10 @@ public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
 
 	@Query("SELECT e FROM Estoque e WHERE e.quantidade <= :quantidade")
 	List<Estoque> findEstoqueQuantidadeLessThan(Integer quantidade);	
+	
+	@Query(value = "SELECT * FROM estoque WHERE quantidade > ?1", nativeQuery = true)
+	List<Estoque> findEstoqueQuantidadeGreaterThan(Integer quantidade);	
+	
+	
 
 }

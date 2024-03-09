@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import br.com.ehmf.AppProdutos.dto.ProdutoDTO;
 import br.com.ehmf.AppProdutos.model.Estoque;
 import br.com.ehmf.AppProdutos.model.Produto;
 import br.com.ehmf.AppProdutos.service.EstoqueService;
@@ -108,4 +108,14 @@ public class EstoqueResource {
 		return ResponseEntity.ok(listEstoque);
 	
 	}
+	
+	@GetMapping("/findEstoqueQuantidadeGreaterThan/{qtde}")
+	public ResponseEntity<List<Estoque>> findEstoqueQuantidadeGreaterThan(@PathVariable Integer qtde)
+	{
+		List<Estoque> listEstoque = estoqueService.findEstoqueQuantidadeGreaterThan(qtde);
+		if (listEstoque == null)
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(listEstoque);	
+	}
+	
 }

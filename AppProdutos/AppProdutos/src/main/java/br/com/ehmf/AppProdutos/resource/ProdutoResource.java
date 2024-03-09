@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ehmf.AppProdutos.dto.ProdutoDTO;
 import br.com.ehmf.AppProdutos.model.Produto;
 import br.com.ehmf.AppProdutos.service.ProdutoService;
 
@@ -72,6 +73,14 @@ public class ProdutoResource {
 	{
 		produtoService.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@GetMapping("/findProdutosAndQuantidade")
+	public ResponseEntity<List<ProdutoDTO>> findProdutosAndQuantidade(){
+		List<ProdutoDTO> listProdutoDTO = produtoService.findProdutosAndQuantidade();
+		if (listProdutoDTO == null)
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(listProdutoDTO);
 	}
 	
 }
