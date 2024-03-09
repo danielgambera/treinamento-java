@@ -22,6 +22,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 			+ "inner join estoque e \r\n"
 			+ "on p.id = e.produto_id \r\n"
 			+ "", nativeQuery = true)
-	List<ProdutoDTO> findProdutosAndQuantidade();
+	List<Object[]> findProdutosAndQuantidade();
+	
+	@Query(value = "SELECT * FROM public.buscar_produtos_estoque();", nativeQuery = true)
+	List<Object[]> findProdutosSimplesAndQuantidade();
 
 }
