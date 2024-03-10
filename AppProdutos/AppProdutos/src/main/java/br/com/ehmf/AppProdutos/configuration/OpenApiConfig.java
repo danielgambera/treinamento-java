@@ -1,5 +1,7 @@
 package br.com.ehmf.AppProdutos.configuration;
 
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,19 +17,29 @@ public class OpenApiConfig {
 	@Bean
 	public OpenAPI customOpenAPI() {
 		
+		final String securitySchemeName = "bearerAuth";
+		 
 		return new OpenAPI() 
 			.components(
-					new Components().addSecuritySchemes("basicScheme",
-							new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic"))
-					).info(new Info()
+					new Components()
+							.addSecuritySchemes(securitySchemeName,
+									new SecurityScheme()
+											.type(SecurityScheme.Type.HTTP)
+											.scheme("bearer")
+											.bearerFormat("JWT")
+											.in(SecurityScheme.In.HEADER)
+											.name("Authorization"))
+					)
+					.addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+					.info(new Info()
 							.title("Treinamento Java")
 							.description("Treinamento Java")
 							.contact(new Contact()
 								.name("Rick Astley")
 								.email("abel.lebel@muaramicintra.com")
 								.url("https://www.youtube.com/watch?v=oxNK7VBizac")
-								).version("Versão 0.0.1-SNAPSHOT")
-							);
+								).version("Versão 0.0.1-SNAPSHOT"));
+						
 
 		}
 }

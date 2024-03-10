@@ -1,6 +1,5 @@
 package br.com.ehmf.AppProdutos.resource;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

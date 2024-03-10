@@ -1,6 +1,5 @@
 package br.com.ehmf.AppProdutos.configuration;
 
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.security.Key;
@@ -51,6 +50,25 @@ public class JwtTokenUtil {
 		catch (Exception ex)
 		{
 			return false;
+		}
+	}
+	
+	public String getUserNameFromToken(String token)
+	{
+		try 
+		{
+			byte[] apiSecretByte = Base64.getEncoder().encode(secret.getBytes());
+			Key secretKey = Keys.hmacShaKeyFor(apiSecretByte);
+			
+			Jws<Claims> claims = Jwts.parser().setSigningKey(apiSecretByte)
+					.parseClaimsJws(token);
+			
+			return claims.getBody().getSubject();
+			
+		}
+		catch (Exception ex)
+		{
+			return null;
 		}
 	}
 	
