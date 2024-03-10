@@ -2,7 +2,6 @@ package br.com.ehmf.AppProdutos.repository;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.ehmf.AppProdutos.dto.ProdutoDTO;
 import br.com.ehmf.AppProdutos.model.Produto;
 
 import java.util.List;
