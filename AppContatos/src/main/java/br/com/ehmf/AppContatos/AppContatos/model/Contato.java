@@ -32,7 +32,7 @@ public class Contato {
 	private String contato;
 	
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "pessoa_id", nullable = false)
+    @JoinColumn(name = "pessoa_id", referencedColumnName="id", nullable = false)
 	private Pessoa pessoa;
 
 	public Contato() {}
