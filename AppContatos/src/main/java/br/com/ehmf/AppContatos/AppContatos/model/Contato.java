@@ -1,9 +1,7 @@
 package br.com.ehmf.AppContatos.AppContatos.model;
 
-import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,16 +30,17 @@ public class Contato {
 	private String contato;
 	
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "pessoa_id", referencedColumnName="id", nullable = false)
+    @JoinColumn(name = "pessoaId", referencedColumnName="id", nullable = false)
 	private Pessoa pessoa;
 
 	public Contato() {}
 
-	public Contato(Long id, Integer tipoContato, String contato) {
+	public Contato(Long id, Integer tipoContato, String contato, Pessoa pessoa) {
 		super();
 		this.id = id;
 		this.tipoContato = tipoContato;
 		this.contato = contato;
+		this.pessoa = pessoa;
 	}
 
 	public Long getId() {
@@ -66,6 +65,14 @@ public class Contato {
 
 	public void setContato(String contato) {
 		this.contato = contato;
+	}
+	
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	@Override
