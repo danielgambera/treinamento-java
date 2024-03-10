@@ -23,7 +23,7 @@ public class OpenApiConfig {
 							.title("Treinamento Java")
 							.description("Treinamento Java")
 							.contact(new Contact()
-								.name("Djobi Djoba")
+								.name("Rick Astley")
 								.email("abel.lebel@muaramicintra.com")
 								.url("https://www.youtube.com/watch?v=oxNK7VBizac")
 								).version("Versão 0.0.1-SNAPSHOT")
