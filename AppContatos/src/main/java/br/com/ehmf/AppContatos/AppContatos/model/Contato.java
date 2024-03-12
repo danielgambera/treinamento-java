@@ -2,6 +2,7 @@ package br.com.ehmf.AppContatos.AppContatos.model;
 
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +23,8 @@ public class Contato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//0 - Telefone | 1 - Celular | 2 - Email
+	//0 - Telefone | 1 - Celular | 2 - Email | 3 - Link
+	@Schema(name = "Tipo de contato", example = "0 - Telefone | 1 - Celular | 2 - Email | 3 - Link")
 	@Column(nullable = false)
 	private Integer tipoContato; 
 	

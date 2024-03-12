@@ -6,9 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ehmf.AppContatos.AppContatos.dto.MalaDiretaDTO;
 import br.com.ehmf.AppContatos.AppContatos.exception.BadRequestException;
 import br.com.ehmf.AppContatos.AppContatos.exception.ResourceNotFoundException;
+import br.com.ehmf.AppContatos.AppContatos.model.Contato;
 import br.com.ehmf.AppContatos.AppContatos.model.Pessoa;
+import br.com.ehmf.AppContatos.AppContatos.repository.ContatoRepository;
 import br.com.ehmf.AppContatos.AppContatos.repository.PessoaRepository;
 import br.com.ehmf.AppContatos.AppContatos.service.interfaces.PessoaServiceInterface;
 
@@ -16,19 +19,22 @@ import br.com.ehmf.AppContatos.AppContatos.service.interfaces.PessoaServiceInter
 public class PessoaService implements PessoaServiceInterface {
 	
 	private PessoaRepository pessoaRepository;
+	private ContatoRepository contatoRepository;
 	
 	@Autowired
-	public PessoaService(PessoaRepository pessoaRepository)
+	public PessoaService(PessoaRepository pessoaRepository, ContatoRepository contatoRepository)
 	{
 		this.pessoaRepository = pessoaRepository;
+		this.contatoRepository = contatoRepository;
 	}
 
 	@Override
 	public Pessoa criar(Pessoa pessoa) {
-		if (pessoa.getId() != null)
+		if (pessoa.getId() != null && pessoa.getId() != 0)
 		{
-			throw new BadRequestException("[Criar Pessoa] - id deve ser nulo");
+			throw new BadRequestException("[Criar Pessoa] - id deve ser nulo ou igual a zero");
 		}
+		ValidarPessoa(pessoa);
 		return pessoaRepository.save(pessoa);
 	}
 
@@ -38,6 +44,7 @@ public class PessoaService implements PessoaServiceInterface {
 		{
 			throw new BadRequestException("[Atualizar Pessoa] - id não pode ser nulo");
 		}
+		ValidarPessoa(pessoa);
 		Optional<Pessoa> consultaPessoa = pessoaRepository.findById(pessoa.getId());
 		if (!consultaPessoa.isPresent())
 		{
@@ -67,16 +74,49 @@ public class PessoaService implements PessoaServiceInterface {
 		Optional<Pessoa> consultarPessoa = pessoaRepository.findById(idPessoa);
 		if (!consultarPessoa.isPresent())
 		{
-			throw new ResourceNotFoundException("[Excluir Pessoa] - pessoa " + idPessoa+ " não encontrada");
+			throw new ResourceNotFoundException("[Consultar Pessoa] - pessoa " + idPessoa+ " não encontrada");
 		}	
-		return pessoaRepository.findById(idPessoa);
+		return consultarPessoa;
 	}
-
+	
+	@Override
+	public List<Contato> consultarContatos(Long idPessoa) {
+		Optional<Pessoa> consultarPessoa = pessoaRepository.findById(idPessoa);
+		if (!consultarPessoa.isPresent())
+		{
+			throw new ResourceNotFoundException("[Consultar Pessoa] - pessoa " + idPessoa+ " não encontrada");
+		}	
+		Pessoa pessoa = consultarPessoa.get();
+		return contatoRepository.findByPessoa(pessoa);
+	}
+	
 	@Override
 	public List<Pessoa> consultar() {
 		return pessoaRepository.findAll();
 	}
+	
+	@Override
+	public MalaDiretaDTO consultarMalaDiretaPessoa(Long idPessoa) {
+		Optional<Pessoa> consultarPessoa = pessoaRepository.findById(idPessoa);
+		if (!consultarPessoa.isPresent())
+		{
+			throw new ResourceNotFoundException("[Mala Direta Pessoa] - pessoa " + idPessoa+ " não encontrada");
+		}	
+		Pessoa pessoa = consultarPessoa.get();
+		MalaDiretaDTO malaDireta = new MalaDiretaDTO();
+		malaDireta.setId(pessoa.getId());
+		malaDireta.setNome(pessoa.getNome());	
+		malaDireta.setMalaDireta(pessoa.getEndereco()+ 
+				" - CEP:" + pessoa.getCep() + " - " + pessoa.getCidade() + "/" + pessoa.getUf());
+		return malaDireta;
+	}
 
-
+	private void ValidarPessoa(Pessoa pessoa)
+	{
+		if (pessoa.getNome().isBlank())
+		{
+			throw new BadRequestException("[Pessoa] - nome não pode ser vazio");
+		}
+	}
 
 }

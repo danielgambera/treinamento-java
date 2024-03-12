@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ehmf.AppContatos.AppContatos.model.Contato;
 import br.com.ehmf.AppContatos.AppContatos.service.ContatoService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/contatos") //http://localhost:8080/api/pessoas
@@ -30,6 +31,7 @@ public class ContatoResource {
 		this.contatoService = contatoService;
 	}
 	
+	@Operation(summary = "Criar Contato")
 	@PostMapping
 	public ResponseEntity<Contato> criar(@RequestBody Contato contato)
 	{
@@ -42,6 +44,7 @@ public class ContatoResource {
 		return ResponseEntity.ok(contatoCriado);
 	}
 	
+	@Operation(summary = "Atualizar Contato")
 	@PutMapping
 	public ResponseEntity<Contato> atualizar(@RequestBody Contato contato)	
 	{
@@ -54,6 +57,7 @@ public class ContatoResource {
 		return ResponseEntity.ok(contatoAtualizado);
 	}
 	
+	@Operation(summary = "Excluir um contato")
 	@DeleteMapping("/{idContato}")
 	public ResponseEntity<?> excluir(@PathVariable Long idContato)
 	{
@@ -61,6 +65,7 @@ public class ContatoResource {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
+	@Operation(summary = "Consultar todos contatos")
 	@GetMapping
 	public ResponseEntity<List<Contato>> Consultar()
 	{
@@ -73,6 +78,7 @@ public class ContatoResource {
 		return ResponseEntity.ok(listaContatos);
 	}
 	
+	@Operation(summary = "Consultar um contato")
 	@GetMapping("/{idContato}")
 	public ResponseEntity<Optional<Contato>> getById(@PathVariable Long idContato)
 	{

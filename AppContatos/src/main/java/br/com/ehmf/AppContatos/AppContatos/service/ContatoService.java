@@ -7,23 +7,39 @@ import org.springframework.stereotype.Service;
 import br.com.ehmf.AppContatos.AppContatos.exception.BadRequestException;
 import br.com.ehmf.AppContatos.AppContatos.exception.ResourceNotFoundException;
 import br.com.ehmf.AppContatos.AppContatos.model.Contato;
+import br.com.ehmf.AppContatos.AppContatos.model.Pessoa;
 import br.com.ehmf.AppContatos.AppContatos.repository.ContatoRepository;
+import br.com.ehmf.AppContatos.AppContatos.repository.PessoaRepository;
 import br.com.ehmf.AppContatos.AppContatos.service.interfaces.ContatoServiceInterface;
 
 @Service
 public class ContatoService implements ContatoServiceInterface {
 
 	private ContatoRepository contatoRepository;
+	private PessoaRepository pessoaRepository;
 	
 	@Autowired
-	public ContatoService(ContatoRepository contatoRepository)
+	public ContatoService(ContatoRepository contatoRepository, PessoaRepository pessoaRepository)
 	{
 		this.contatoRepository = contatoRepository;
+		this.pessoaRepository = pessoaRepository;
 	}
 	
 	@Override
 	public Contato criar(Contato contato) {
-		return contatoRepository.save(contato);
+		if (contato.getPessoa() == null || contato.getPessoa().getId() == null)
+		{
+			throw new BadRequestException("[Criar Contato] - necessário pessoa com id válido");
+		}
+		ValidarContato(contato);
+		Optional<Pessoa> consultaPessoa = pessoaRepository.findById(contato.getPessoa().getId());
+		if (!consultaPessoa.isPresent())
+		{
+			throw new ResourceNotFoundException("[Criar Contato] - pessoa " + contato.getPessoa().getId() + " não encontrada");
+		}	
+		Contato contatoRetorno = contatoRepository.save(contato);
+		contatoRetorno.setPessoa(consultaPessoa.get());
+		return contatoRetorno;
 	}
 
 	@Override
@@ -32,6 +48,7 @@ public class ContatoService implements ContatoServiceInterface {
 		{
 			throw new BadRequestException("[Atualizar Contato] - id não pode ser nulo");
 		}
+		ValidarContato(contato);
 		Optional<Contato> consultaContato = contatoRepository.findById(contato.getId());
 		if (!consultaContato.isPresent())
 		{
@@ -65,6 +82,16 @@ public class ContatoService implements ContatoServiceInterface {
 		return contatoRepository.findAll();
 	}
 
-	
+	private void ValidarContato(Contato contato)
+	{
+		if (contato.getContato().isBlank())
+		{
+			throw new BadRequestException("[Contato] - contato não pode ser vazio");
+		}
+		if (contato.getTipoContato() == null || contato.getTipoContato() < 0 || contato.getTipoContato() > 3)
+		{
+			throw new BadRequestException("[Contato] - tipoContato deve ser um numero entre 0 e 3");
+		}
+	}
 
 }
