@@ -69,6 +69,11 @@ public class ContatoService implements ContatoServiceInterface {
 
 	@Override
 	public void excluir(Long idContato) {
+		Optional<Contato> excluirContato = contatoRepository.findById(idContato);
+		if (!excluirContato.isPresent())
+		{
+			throw new ResourceNotFoundException("[Excluir Contato] - contato " + idContato+ " não encontrado");
+		}
 		contatoRepository.deleteById(idContato);			
 	}
 
