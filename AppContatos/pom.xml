@@ -62,6 +62,12 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Segurança em Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+		
 		<!-- JWT Support -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -85,6 +91,7 @@
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
+        
 	</dependencies>
 	
 	

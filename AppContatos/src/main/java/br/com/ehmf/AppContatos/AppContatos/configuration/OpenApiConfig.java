@@ -36,7 +36,7 @@ public class OpenApiConfig {
 							.contact(new Contact()
 								.name("Rick Roll")
 								.email("abel.lebel@muaramicintra.com")
-								.url("https://www.youtube.com/watch?v=oxNK7VBizac")
+								.url("https://www.youtube.com/watch?v=oYhUrP5r_hY")
 								).version("Versão 0.0.1-SNAPSHOT"));
 						
 
