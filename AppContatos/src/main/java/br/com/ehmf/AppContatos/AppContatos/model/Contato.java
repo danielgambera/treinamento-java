@@ -1,9 +1,8 @@
 package br.com.ehmf.AppContatos.AppContatos.model;
 
-import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +23,8 @@ public class Contato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//0 - Telefone | 1 - Celular | 2 - Email
+	//0 - Telefone | 1 - Celular | 2 - Email | 3 - Link
+	@Schema(name = "Tipo de contato", example = "0 - Telefone | 1 - Celular | 2 - Email | 3 - Link")
 	@Column(nullable = false)
 	private Integer tipoContato; 
 	
@@ -32,16 +32,17 @@ public class Contato {
 	private String contato;
 	
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "pessoa_id", referencedColumnName="id", nullable = false)
+    @JoinColumn(name = "pessoaId", referencedColumnName="id", nullable = false)
 	private Pessoa pessoa;
 
 	public Contato() {}
 
-	public Contato(Long id, Integer tipoContato, String contato) {
+	public Contato(Long id, Integer tipoContato, String contato, Pessoa pessoa) {
 		super();
 		this.id = id;
 		this.tipoContato = tipoContato;
 		this.contato = contato;
+		this.pessoa = pessoa;
 	}
 
 	public Long getId() {
@@ -66,6 +67,14 @@ public class Contato {
 
 	public void setContato(String contato) {
 		this.contato = contato;
+	}
+	
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	@Override
